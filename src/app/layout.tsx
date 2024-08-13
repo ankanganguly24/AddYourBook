@@ -22,7 +22,9 @@ export default function RootLayout({
         className={`${inter.className} min-h-screen flex bg-secondary flex-col`}
       >
         <Header title="Add Your Book" />
-        <main className="flex-grow container mx-auto p-4">{children}</main>
+        <main className="md:flex-grow md:container mx-0 block md:mx-auto p-4">
+          {children}
+        </main>
         <Footer year={new Date().getFullYear()} text="Add Your Book" />
       </body>
     </html>

@@ -18,7 +18,6 @@ const getBooks = async (): Promise<Book[]> => {
 
 const deleteBook = async (id: string) => {
   try {
-    // Ensure the id is properly encoded in the URL
     const response = await fetch(
       `http://localhost:3000/api/topics?id=${encodeURIComponent(id)}`,
       {
@@ -71,13 +70,12 @@ const BookList: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    <div className="flex flex-wrap gap-4 md:p-4">
       {books.map((book) => (
         <BookCard
           key={book._id}
           title={book.title}
           description={book.description}
-          onView={() => console.log("view")}
           onUpdate={() => handleNavigation(book._id)}
           onDelete={() => handleDelete(book._id)}
         />
