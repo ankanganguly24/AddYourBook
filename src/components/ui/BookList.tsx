@@ -16,6 +16,27 @@ const getBooks = async (): Promise<Book[]> => {
   return data.topics;
 };
 
+const deleteBook = async (id: string) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/topics?id=${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log("Book Deleted:", result);
+      return true;
+    } else {
+      const errorData = await response.json();
+      console.error("Error deleting book:", errorData.message);
+      return false;
+    }
+  } catch (error) {
+    console.error("Error deleting book:", error);
+    return false;
+  }
+};
+
 const BookList: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const router = useRouter();
@@ -38,6 +59,13 @@ const BookList: React.FC = () => {
     router.push("/editbooks");
   };
 
+  const handleDelete = async (id: string) => {
+    const success = await deleteBook(id);
+    if (success) {
+      setBooks((prevBooks) => prevBooks.filter((book) => book._id !== id));
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {books.map((book) => (
@@ -47,7 +75,7 @@ const BookList: React.FC = () => {
           description={book.description}
           onView={() => console.log("view")}
           onUpdate={handleNavigation}
-          onDelete={() => console.log("delete")}
+          onDelete={() => handleDelete(book._id)}
         />
       ))}
     </div>
