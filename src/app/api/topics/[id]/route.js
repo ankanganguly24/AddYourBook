@@ -13,7 +13,7 @@ export async function PUT(request, { params }) {
     const updatedTopic = await Topic.findByIdAndUpdate(
       id,
       { title, description },
-      { new: true } // This option returns the updated document
+      { new: true }
     );
 
     if (!updatedTopic) {
@@ -30,4 +30,11 @@ export async function PUT(request, { params }) {
       { status: 500 }
     );
   }
+}
+
+export async function GET(request, { params }) {
+  const { id } = params;
+  await connectMongoDB();
+  const topic = await Topic.findOne({ _id: id });
+  return NextResponse.json({ topic }, { status: 200 });
 }
