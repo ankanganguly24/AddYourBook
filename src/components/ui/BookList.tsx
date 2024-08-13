@@ -71,15 +71,21 @@ const BookList: React.FC = () => {
 
   return (
     <div className="flex flex-wrap gap-4 md:p-4">
-      {books.map((book) => (
-        <BookCard
-          key={book._id}
-          title={book.title}
-          description={book.description}
-          onUpdate={() => handleNavigation(book._id)}
-          onDelete={() => handleDelete(book._id)}
-        />
-      ))}
+      {books.length === 0 ? (
+        <p className="text-center">
+          No books available. Add a book to see it here!
+        </p>
+      ) : (
+        books.map((book) => (
+          <BookCard
+            key={book._id}
+            title={book.title}
+            description={book.description}
+            onUpdate={() => handleNavigation(book._id)}
+            onDelete={() => handleDelete(book._id)}
+          />
+        ))
+      )}
     </div>
   );
 };
