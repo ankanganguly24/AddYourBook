@@ -18,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+      <body
+        className={`${inter.className} min-h-screen flex bg-secondary flex-col`}
+      >
         <Header title="Add Your Book" />
         <main className="flex-grow container mx-auto p-4">{children}</main>
         <Footer year={new Date().getFullYear()} text="Add Your Book" />
