@@ -18,9 +18,13 @@ const getBooks = async (): Promise<Book[]> => {
 
 const deleteBook = async (id: string) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/topics?id=${id}`, {
-      method: "DELETE",
-    });
+    // Ensure the id is properly encoded in the URL
+    const response = await fetch(
+      `http://localhost:3000/api/topics?id=${encodeURIComponent(id)}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (response.ok) {
       const result = await response.json();
@@ -55,8 +59,8 @@ const BookList: React.FC = () => {
     fetchBooks();
   }, []);
 
-  const handleNavigation = () => {
-    router.push("/editbooks");
+  const handleNavigation = (id: string) => {
+    router.push(`/editbooks/${id}`);
   };
 
   const handleDelete = async (id: string) => {
@@ -74,7 +78,7 @@ const BookList: React.FC = () => {
           title={book.title}
           description={book.description}
           onView={() => console.log("view")}
-          onUpdate={handleNavigation}
+          onUpdate={() => handleNavigation(book._id)}
           onDelete={() => handleDelete(book._id)}
         />
       ))}

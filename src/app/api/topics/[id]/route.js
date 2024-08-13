@@ -5,8 +5,14 @@ import Topic from "../../../../../models/topic";
 export async function PUT(request, { params }) {
   try {
     const { id } = params;
-    const { newTitle: title, newDescription: description } =
-      await request.json();
+    const { title, description } = await request.json();
+
+    if (!id || !title || !description) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
     await connectMongoDB();
 
@@ -25,6 +31,7 @@ export async function PUT(request, { params }) {
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error updating topic:", error);
     return NextResponse.json(
       { message: "Error updating topic", error: error.message },
       { status: 500 }

@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,19 +21,52 @@ const bookSchema = z.object({
 
 type BookFormInputs = z.infer<typeof bookSchema>;
 
-export const EditBookForm: React.FC = () => {
+interface EditBookFormProps {
+  id: string;
+}
+
+export const EditBookForm: React.FC<EditBookFormProps> = ({ id }) => {
   const form = useForm<BookFormInputs>({
     resolver: zodResolver(bookSchema),
   });
 
-  const onSubmit = (data: BookFormInputs) => {
-    console.log("Book Data:", data);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const onSubmit = async (data: BookFormInputs) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/topics/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: data.title,
+          description: data.description,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("Book Updated:", result);
+      } else {
+        throw new Error(result.message || "Failed to update book");
+      }
+    } catch (error: any) {
+      setError(error.message || "An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div>
       <h1 className="text-2xl text-primary underline mb-5 text-center font-bold">
-        Edit Your book
+        Edit Your Book
       </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -46,7 +77,7 @@ export const EditBookForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Add your bookname" {...field} />
+                  <Input placeholder="Add your book name" {...field} />
                 </FormControl>
                 <FormMessage className="text-red-800" />
               </FormItem>
@@ -60,13 +91,18 @@ export const EditBookForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Add your Description" {...field} />
+                  <Textarea placeholder="Add your description" {...field} />
                 </FormControl>
                 <FormMessage className="text-red-800" />
               </FormItem>
             )}
           />
-          <Button type="submit">Update</Button>
+
+          <Button type="submit" disabled={loading}>
+            {loading ? "Updating..." : "Update"}
+          </Button>
+
+          {error && <p className="text-red-800 mt-2">{error}</p>}
         </form>
       </Form>
     </div>
