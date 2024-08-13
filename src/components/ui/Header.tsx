@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface HeaderProps {
@@ -6,8 +7,10 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
+  const router = useRouter();
+
   const handleRoute = () => {
-    window.location.href = "/";
+    router.push("/");
   };
 
   return (

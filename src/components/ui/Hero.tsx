@@ -1,9 +1,18 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
 import book from "../../../public/book.png";
 import { Button } from "./button";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
+  const router = useRouter();
+
+  const handleRoute = () => {
+    router.push("/yourbooks");
+  };
+
   return (
     <div className="flex justify-between md:px-10 px-2 py-3 md:py-0 items-center mb-10 border-b">
       <div className="md:w-[50%] w-full">
@@ -14,7 +23,10 @@ const Hero = () => {
           place. Start building your dream library today!
         </p>
         <div>
-          <Button variant={"outline"}> See your wishlist! </Button>
+          <Button variant={"outline"} onClick={handleRoute}>
+            {" "}
+            See your wishlist!{" "}
+          </Button>
         </div>
       </div>
 
