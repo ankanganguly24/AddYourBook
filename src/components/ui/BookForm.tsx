@@ -28,8 +28,32 @@ export const BookForm: React.FC = () => {
     resolver: zodResolver(bookSchema),
   });
 
-  const onSubmit = (data: BookFormInputs) => {
-    console.log("Book Data:", data);
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(
+    null
+  );
+
+  const onSubmit = async (data: BookFormInputs) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/topics", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setSuccessMessage("Book created successfully!");
+        form.reset();
+      } else {
+        const errorData = await response.json();
+        setSuccessMessage(null);
+      }
+    } catch (error) {
+      console.error("Error creating book:", error);
+      setSuccessMessage(null);
+    }
   };
 
   return (
@@ -46,7 +70,7 @@ export const BookForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Add your bookname" {...field} />
+                  <Input placeholder="Add your book name" {...field} />
                 </FormControl>
                 <FormMessage className="text-red-800" />
               </FormItem>
@@ -60,7 +84,7 @@ export const BookForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Add your Description" {...field} />
+                  <Textarea placeholder="Add your description" {...field} />
                 </FormControl>
                 <FormMessage className="text-red-800" />
               </FormItem>
@@ -69,6 +93,10 @@ export const BookForm: React.FC = () => {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
+
+      {successMessage && (
+        <div className="mt-4 text-green-600 text-center">{successMessage}</div>
+      )}
     </div>
   );
 };
