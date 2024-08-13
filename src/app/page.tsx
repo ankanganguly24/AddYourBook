@@ -1,5 +1,9 @@
-import Header from "@/components/ui/Header";
+import BookForm from "@/components/ui/BookForm";
 
 export default function Home() {
-  return <main></main>;
+  return (
+    <main>
+      <BookForm />
+    </main>
+  );
 }
