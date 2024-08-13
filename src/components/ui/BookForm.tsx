@@ -43,11 +43,8 @@ export const BookForm: React.FC = () => {
       });
 
       if (response.ok) {
-        const result = await response.json();
         setSuccessMessage("Book created successfully!");
-        form.reset();
       } else {
-        const errorData = await response.json();
         setSuccessMessage(null);
       }
     } catch (error) {
