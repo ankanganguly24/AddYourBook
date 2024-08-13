@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -16,12 +17,12 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <header className="bg-primary text-white p-3 md:p-4 shadow-md">
       <div className="container md:mx-auto">
-        <h1
+        <Link
           className="text-xl font-bold text-center md:text-left cursor-pointer"
-          onClick={handleRoute}
+          href={"/"}
         >
           {title}
-        </h1>
+        </Link>
       </div>
     </header>
   );
