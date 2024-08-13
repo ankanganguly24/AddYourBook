@@ -2,6 +2,7 @@
 
 import React from "react";
 import BookCard from "./Bookcard";
+import { useRouter } from "next/navigation";
 
 const books = [
   {
@@ -16,6 +17,11 @@ const books = [
 ];
 
 const BookList: React.FC = () => {
+  const router = useRouter();
+  const handlenavigation = () => {
+    router.push("/editbooks");
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {books.map((book, index) => (
@@ -23,7 +29,8 @@ const BookList: React.FC = () => {
           key={index}
           title={book.title}
           description={book.description}
-          onUpdate={() => console.log("update")}
+          onView={() => console.log("view")}
+          onUpdate={handlenavigation}
           onDelete={() => console.log("delete")}
         />
       ))}
